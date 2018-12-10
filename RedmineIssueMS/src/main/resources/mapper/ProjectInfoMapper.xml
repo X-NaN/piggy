@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xnn.dao.ProjectInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.xnn.model.ProjectInfo" >
+    <constructor >
+      <idArg column="project_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_outer_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="risk_level" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="hardware_platform" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="platform_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="leader_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_leader_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_approval_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_approval_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bringUp_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bringUp_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sdv_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sdv_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="mandatory_certification_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="mandatory_certification_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sit_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="sit_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="network_test_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="network_test_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="mpt_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="mpt_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="lvt_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="lvt_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="bz" jdbcType="VARCHAR" javaType="java.lang.String" />
+    </constructor>
+    <id column="project_id" property="projectId" />
+    <result column="project_name" property="projectName" />
+    <result column="project_outer_name" property="projectOuterName" />
+    <result column="project_status" property="projectStatus" />
+
+    <result column="risk_level" property="riskLevel" />
+    <result column="project_type" property="projectType" />
+    <result column="hardware_platform" property="hardwarePlatform" />
+    <result column="platform_model" property="platformModel" />
+    <result column="leader_id" property="leaderId" />
+    <result column="project_leader_id" property="projectLeaderId" />
+
+    <result column="project_approval_period" property="projectApprovalPeriod" />
+    <result column="project_approval_status" property="projectApprovalStatus" />
+    <result column="bringUp_period" property="bringupPeriod" />
+    <result column="bringUp_status" property="bringupStatus" />
+    <result column="sdv_period" property="sdvPeriod" />
+    <result column="sdv_status" property="sdvStatus" />
+    <result column="mandatory_certification_period" property="mandatoryCertificationPeriod" />
+    <result column="mandatory_certification_status" property="mandatoryCertificationStatus" />
+    <result column="sit_period" property="sitPeriod" />
+    <result column="sit_status" property="sitStatus" />
+
+    <result column="network_test_period" property="networkTestPeriod" />
+    <result column="network_test_status" property="networkTestStatus" />
+    <result column="mpt_period" property="mptPeriod" />
+    <result column="mpt_status" property="mptStatus" />
+    <result column="lvt_period" property="lvtPeriod" />
+    <result column="lvt_status" property="lvtStatus" />
+    <result column="bz" property="bz" />
+    <!--
+       方式一：嵌套结果：使用嵌套结果映射来处理重复的联合结果的子集
+                 封装联表查询的数据(去除重复的数据)
+            select * from class c, teacher t where c.teacher_id=t.t_id and c.c_id=1
+       -->
+    <association property="leader" javaType="com.xnn.model.UserInfo">
+      <id property="userId" column="leader_id"/>
+      <result property="userName" column="leader_name"/>
+    </association>
+    <association property="projectLeader" javaType="com.xnn.model.UserInfo">
+      <id property="userId" column="project_leader_id"/>
+      <result property="userName" column="project_leader_name"/>
+    </association>
+
+  </resultMap>
+  <sql id="Base_Column_List" >
+    project_id, project_name, project_outer_name, project_status, risk_level, project_type,
+    hardware_platform, platform_model, leader_id, project_leader_id, project_approval_period, 
+    project_approval_status, bringUp_period, bringUp_status, sdv_period, sdv_status, 
+    mandatory_certification_period, mandatory_certification_status, sit_period, sit_status, 
+    network_test_period, network_test_status, mpt_period, mpt_status, lvt_period, lvt_status, 
+    bz
+  </sql>
+
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    <!--
+    select
+    <include refid="Base_Column_List" />
+    from project_info
+    where project_id = #{projectId,jdbcType=VARCHAR}
+-->
+    SELECT project_id,project_name,project_outer_name,project_status,risk_level,project_type,hardware_platform,platform_model,
+    leader_id,a.user_name AS leader_name,project_leader_id,b.user_name AS  project_leader_name,
+    project_approval_period,project_approval_status,bringUp_period,bringUp_status,sdv_period,sdv_status,
+    mandatory_certification_period,mandatory_certification_status,sit_period,sit_status,network_test_period,network_test_status,
+    mpt_period,mpt_status,lvt_period,lvt_status,bz
+    FROM project_info
+    LEFT JOIN user_info AS a on project_info.leader_id = a.user_id
+    LEFT JOIN user_info AS b ON project_info.project_leader_id = b.user_id
+
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectProjectByPage" parameterType="map" resultMap="BaseResultMap">
+    select * from project_info
+  </select>
+
+  <!--
+  <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.String">
+SELECT * FROM project_info WHERE  project_id=#{projectId,jdbcType=VARCHAR}
+
+  </select>
+  <select id="getLeader" parameterType="int" resultType="com.xnn.model.UserInfo">
+            SELECT * FROM user_info WHERE user_id=#{user_id}
+ </select>
+  <select id="getProjectLeader" parameterType="int" resultType="com.xnn.model.UserInfo">
+    SELECT * FROM user_info WHERE user_id=#{user_id}
+  </select>
+   使用resultMap映射实体类和字段之间的一一对应关系
+        <resultMap type="com.xnn.model.ProjectInfo" id="ProjectResultMap">
+
+          <constructor >
+            <idArg column="project_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_outer_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="risk_level" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="hardware_platform" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="platform_model" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="leader_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_leader_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_approval_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="project_approval_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="bringUp_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="bringUp_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sdv_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sdv_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="mandatory_certification_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="mandatory_certification_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sit_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="sit_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="network_test_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="network_test_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="mpt_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="mpt_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="lvt_period" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="lvt_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+            <arg column="bz" jdbcType="VARCHAR" javaType="java.lang.String" />
+          </constructor>
+          <id column="project_id" property="projectId" />
+          <result column="project_name" property="projectName" />
+          <result column="project_outer_name" property="projectOuterName" />
+          <result column="project_status" property="projectStatus" />
+
+          <result column="risk_level" property="riskLevel" />
+          <result column="project_type" property="projectType" />
+          <result column="hardware_platform" property="hardwarePlatform" />
+          <result column="platform_model" property="platformModel" />
+          <result column="leader_id" property="leaderId" />
+          <result column="project_leader_id" property="projectLeaderId" />
+
+          <result column="project_approval_period" property="projectApprovalPeriod" />
+          <result column="project_approval_status" property="projectApprovalStatus" />
+          <result column="bringUp_period" property="bringupPeriod" />
+          <result column="bringUp_status" property="bringupStatus" />
+          <result column="sdv_period" property="sdvPeriod" />
+          <result column="sdv_status" property="sdvStatus" />
+          <result column="mandatory_certification_period" property="mandatoryCertificationPeriod" />
+          <result column="mandatory_certification_status" property="mandatoryCertificationStatus" />
+          <result column="sit_period" property="sitPeriod" />
+          <result column="sit_status" property="sitStatus" />
+
+          <result column="network_test_period" property="networkTestPeriod" />
+          <result column="network_test_status" property="networkTestStatus" />
+          <result column="mpt_period" property="mptPeriod" />
+          <result column="mpt_status" property="mptStatus" />
+          <result column="lvt_period" property="lvtPeriod" />
+          <result column="lvt_status" property="lvtStatus" />
+          <result column="bz" property="bz" />
+
+          <association property="leader" column="leader_id" select="getLeader"/>
+
+          <association property="projectLeader" column="project_leader_id" select="getProjectLeader"/>
+
+        </resultMap>
+        -->
+  <select id="selectAll" resultMap="BaseResultMap" >
+SELECT * FROM project_info  ORDER BY project_id
+  </select>
+  
+  <delete id="deleteByProjectId" parameterType="java.lang.String" >
+    delete from project_info
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xnn.model.ProjectInfo" >
+    insert into project_info (project_id, project_name, project_outer_name, 
+      project_status, risk_level, project_type, 
+      hardware_platform, platform_model, leader_id, 
+      project_leader_id, project_approval_period, 
+      project_approval_status, bringUp_period, bringUp_status, 
+      sdv_period, sdv_status, mandatory_certification_period, 
+      mandatory_certification_status, sit_period, 
+      sit_status, network_test_period, network_test_status, 
+      mpt_period, mpt_status, lvt_period, 
+      lvt_status, bz)
+    values (#{projectId,jdbcType=VARCHAR}, #{projectName,jdbcType=VARCHAR}, #{projectOuterName,jdbcType=VARCHAR}, 
+      #{projectStatus,jdbcType=VARCHAR}, #{riskLevel,jdbcType=VARCHAR}, #{projectType,jdbcType=VARCHAR}, 
+      #{hardwarePlatform,jdbcType=VARCHAR}, #{platformModel,jdbcType=VARCHAR}, #{leaderId,jdbcType=VARCHAR}, 
+      #{projectLeaderId,jdbcType=VARCHAR}, #{projectApprovalPeriod,jdbcType=VARCHAR}, 
+      #{projectApprovalStatus,jdbcType=VARCHAR}, #{bringupPeriod,jdbcType=VARCHAR}, #{bringupStatus,jdbcType=VARCHAR}, 
+      #{sdvPeriod,jdbcType=VARCHAR}, #{sdvStatus,jdbcType=VARCHAR}, #{mandatoryCertificationPeriod,jdbcType=VARCHAR}, 
+      #{mandatoryCertificationStatus,jdbcType=VARCHAR}, #{sitPeriod,jdbcType=VARCHAR}, 
+      #{sitStatus,jdbcType=VARCHAR}, #{networkTestPeriod,jdbcType=VARCHAR}, #{networkTestStatus,jdbcType=VARCHAR}, 
+      #{mptPeriod,jdbcType=VARCHAR}, #{mptStatus,jdbcType=VARCHAR}, #{lvtPeriod,jdbcType=VARCHAR}, 
+      #{lvtStatus,jdbcType=VARCHAR}, #{bz,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByProjectId" parameterType="com.xnn.model.ProjectInfo" >
+    update project_info
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      project_outer_name = #{projectOuterName,jdbcType=VARCHAR},
+      project_status = #{projectStatus,jdbcType=VARCHAR},
+      risk_level = #{riskLevel,jdbcType=VARCHAR},
+      project_type = #{projectType,jdbcType=VARCHAR},
+      hardware_platform = #{hardwarePlatform,jdbcType=VARCHAR},
+      platform_model = #{platformModel,jdbcType=VARCHAR},
+      leader_id = #{leaderId,jdbcType=VARCHAR},
+      project_leader_id = #{projectLeaderId,jdbcType=VARCHAR},
+      project_approval_period = #{projectApprovalPeriod,jdbcType=VARCHAR},
+      project_approval_status = #{projectApprovalStatus,jdbcType=VARCHAR},
+      bringUp_period = #{bringupPeriod,jdbcType=VARCHAR},
+      bringUp_status = #{bringupStatus,jdbcType=VARCHAR},
+      sdv_period = #{sdvPeriod,jdbcType=VARCHAR},
+      sdv_status = #{sdvStatus,jdbcType=VARCHAR},
+      mandatory_certification_period = #{mandatoryCertificationPeriod,jdbcType=VARCHAR},
+      mandatory_certification_status = #{mandatoryCertificationStatus,jdbcType=VARCHAR},
+      sit_period = #{sitPeriod,jdbcType=VARCHAR},
+      sit_status = #{sitStatus,jdbcType=VARCHAR},
+      network_test_period = #{networkTestPeriod,jdbcType=VARCHAR},
+      network_test_status = #{networkTestStatus,jdbcType=VARCHAR},
+      mpt_period = #{mptPeriod,jdbcType=VARCHAR},
+      mpt_status = #{mptStatus,jdbcType=VARCHAR},
+      lvt_period = #{lvtPeriod,jdbcType=VARCHAR},
+      lvt_status = #{lvtStatus,jdbcType=VARCHAR},
+      bz = #{bz,jdbcType=VARCHAR}
+    where project_id = #{projectId,jdbcType=VARCHAR}
+  </update>
+</mapper>

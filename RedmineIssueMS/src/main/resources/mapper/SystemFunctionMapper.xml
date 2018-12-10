@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.xnn.dao.SystemFunctionMapper" >
+  <resultMap id="BaseResultMap" type="com.xnn.model.SystemFunction" >
+    <constructor >
+      <idArg column="fun_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <idArg column="parent_code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="button_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="menu_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="winform_path" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="winform_flag" jdbcType="CHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fun_id, parent_code, button_name, menu_name, winform_path, winform_flag
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.xnn.model.SystemFunction" >
+    select 
+    <include refid="Base_Column_List" />
+    from system_function
+    where fun_id = #{funId,jdbcType=VARCHAR}
+      and parent_code = #{parentCode,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.xnn.model.SystemFunction" >
+    delete from system_function
+    where fun_id = #{funId,jdbcType=VARCHAR}
+      and parent_code = #{parentCode,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xnn.model.SystemFunction" >
+    insert into system_function (fun_id, parent_code, button_name, 
+      menu_name, winform_path, winform_flag
+      )
+    values (#{funId,jdbcType=VARCHAR}, #{parentCode,jdbcType=VARCHAR}, #{buttonName,jdbcType=VARCHAR}, 
+      #{menuName,jdbcType=VARCHAR}, #{winformPath,jdbcType=VARCHAR}, #{winformFlag,jdbcType=CHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xnn.model.SystemFunction" >
+    insert into system_function
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="funId != null" >
+        fun_id,
+      </if>
+      <if test="parentCode != null" >
+        parent_code,
+      </if>
+      <if test="buttonName != null" >
+        button_name,
+      </if>
+      <if test="menuName != null" >
+        menu_name,
+      </if>
+      <if test="winformPath != null" >
+        winform_path,
+      </if>
+      <if test="winformFlag != null" >
+        winform_flag,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="funId != null" >
+        #{funId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentCode != null" >
+        #{parentCode,jdbcType=VARCHAR},
+      </if>
+      <if test="buttonName != null" >
+        #{buttonName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="winformPath != null" >
+        #{winformPath,jdbcType=VARCHAR},
+      </if>
+      <if test="winformFlag != null" >
+        #{winformFlag,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xnn.model.SystemFunction" >
+    update system_function
+    <set >
+      <if test="buttonName != null" >
+        button_name = #{buttonName,jdbcType=VARCHAR},
+      </if>
+      <if test="menuName != null" >
+        menu_name = #{menuName,jdbcType=VARCHAR},
+      </if>
+      <if test="winformPath != null" >
+        winform_path = #{winformPath,jdbcType=VARCHAR},
+      </if>
+      <if test="winformFlag != null" >
+        winform_flag = #{winformFlag,jdbcType=CHAR},
+      </if>
+    </set>
+    where fun_id = #{funId,jdbcType=VARCHAR}
+      and parent_code = #{parentCode,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xnn.model.SystemFunction" >
+    update system_function
+    set button_name = #{buttonName,jdbcType=VARCHAR},
+      menu_name = #{menuName,jdbcType=VARCHAR},
+      winform_path = #{winformPath,jdbcType=VARCHAR},
+      winform_flag = #{winformFlag,jdbcType=CHAR}
+    where fun_id = #{funId,jdbcType=VARCHAR}
+      and parent_code = #{parentCode,jdbcType=VARCHAR}
+  </update>
+
+  <select id="loadOrgTree" resultMap="BaseResultMap">
+   SELECT * FROM system_function
+  </select>
+
+</mapper>
