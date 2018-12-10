@@ -5,6 +5,7 @@ import com.xnn.model.ProjectInfo;
 import com.xnn.model.SystemFunction;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IDEA
@@ -32,6 +33,7 @@ public interface IProjectService {
 
     public List<ProjectInfoDto> getAll();
 
+    public List<ProjectInfoDto> selectProjectByPage(int currPage,int pageSize);
 
 }
 

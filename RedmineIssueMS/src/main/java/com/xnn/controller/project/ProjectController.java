@@ -30,18 +30,20 @@ public class ProjectController {
     @Autowired
     ProjectServiceImpl projectServiceImpl;
 
-
-    @RequestMapping("/list")
-    @ResponseBody
-    public ResultData getProjectList(){
-        ResultData resultData=new ResultData();
-        List<ProjectInfoDto> projectInfoDtoList=projectServiceImpl.getAll();
-        resultData.setCode(BaseResultStatus.SUCCESS.getCode());//BaseResultStatus.SUCCESS是枚举实例
-        resultData.setMessage(BaseResultStatus.SUCCESS.getMessage());
-        Map data=new HashMap<String,Object>();
-        data.put("projects",projectInfoDtoList);
-        resultData.setData(data);
-        return resultData;
+    /**
+     * @param projectInfoDto
+     * @param model
+     * @return
+     */
+    @RequestMapping("/addProject")
+    public String add(ProjectInfoDto projectInfoDto, Model model) {
+        if (projectServiceImpl.insertProject(projectInfoDto)) {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_SUCCESS);
+        } else {
+            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_FAIL);
+        }
+        //返回视图名
+        return "/project/addProject";
     }
 
 
@@ -66,9 +68,6 @@ public class ProjectController {
         //返回ModelAndView对象mav
         return mav;
     }
-
-
-
 
     /**
      * 获得请求参数
@@ -123,38 +122,39 @@ public class ProjectController {
     }
 */
 
-    /**
-     * 查询所有机型项目记录
-     *
-     * @param model
-     * @return
-     */
-    @RequestMapping("/getAll")
-    public String getAll(Model model) {
-
-        List<ProjectInfoDto> projectInfoDtoList = projectServiceImpl.getAll();
-
-        model.addAttribute("projectList", projectInfoDtoList);
-
-        return "project/ProjectDailyReport";
-
+    @ResponseBody
+    @RequestMapping("/list")
+    public ResultData getAllProject(){
+        ResultData resultData=new ResultData();
+        List<ProjectInfoDto> projectInfoDtoList=projectServiceImpl.getAll();
+        resultData.setCode(BaseResultStatus.SUCCESS.getCode());//BaseResultStatus.SUCCESS是枚举实例
+        resultData.setMessage(BaseResultStatus.SUCCESS.getMessage());
+        Map data=new HashMap<String,Object>();
+        data.put("projects",projectInfoDtoList);
+        resultData.setData(data);
+        return resultData;
     }
 
-    /**
-     * @param projectInfoDto
-     * @param model
-     * @return
-     */
-    @RequestMapping("/addProject")
-    public String add(ProjectInfoDto projectInfoDto, Model model) {
-        if (projectServiceImpl.insertProject(projectInfoDto)) {
-            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_SUCCESS);
-        } else {
-            model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_FAIL);
+    @ResponseBody
+    @RequestMapping(value = "/page/{currPage}/{pageSize}")
+    public ResultData getProjectsByPage(@PathVariable("currPage") int currPage,@PathVariable("pageSize") int pageSize){
+        ResultData resultData=new ResultData();
+        List<ProjectInfoDto> projects=projectServiceImpl.selectProjectByPage(currPage,pageSize);
+        if (projects.size()>0){
+            resultData.setCode(BaseResultStatus.SUCCESS.getCode());
+            resultData.setMessage(BaseResultStatus.SUCCESS.getMessage());
+            Map data=new HashMap<String,Object>();
+            data.put("projetcs",projects);
+            resultData.setData(data);
+        }else {
+            resultData.setCode(BaseResultStatus.ERROR.getCode());
+            resultData.setMessage(BaseResultStatus.SUCCESS.getMessage());
         }
-        //返回视图名
-        return "/project/addProject";
+        return resultData;
+
     }
+
+
 
 
 }

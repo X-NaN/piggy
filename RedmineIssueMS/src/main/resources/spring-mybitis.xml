@@ -36,7 +36,15 @@
         <property name="typeAliasesPackage" value="com.xnn.model"/>
         <!-- 扫描mybatis的SQL配置文件 -->
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
-
+        <property name="plugins">
+            <array>
+                <!-- 分页插件配置 -->
+                <bean id="pageInterceptor" class="com.xnn.interceptor.PageInterceptor">
+                    <property name="limit" value="10"/>
+                    <property name="dbType" value="mysql"/>
+                </bean>
+            </array>
+        </property>
     </bean>
 
     <!-- DAO接口所在包名，Spring会自动查找其下的类 -->

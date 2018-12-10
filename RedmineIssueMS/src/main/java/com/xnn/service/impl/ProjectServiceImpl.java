@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IDEA
@@ -62,5 +64,26 @@ public class ProjectServiceImpl implements IProjectService {
             result.add(projectInfoDto);
         }
         return result;
+    }
+
+    /**
+     * 分页查询
+     * @param currPage
+     * @param pageSize
+     * @return
+     */
+    public List<ProjectInfoDto> selectProjectByPage(int currPage,int pageSize){
+        Map<String,Object> data=new HashMap<String, Object>();
+        data.put("currPage",currPage);
+        data.put("pageSize",pageSize);
+        List<ProjectInfoDto> result=new ArrayList<ProjectInfoDto>();
+        List<ProjectInfo> projectInfoList=projectInfoMapper.selectProjectByPage(data);
+         for (ProjectInfo projectInfo:projectInfoList){
+             ProjectInfoDto projectInfoDto=new ProjectInfoDto();
+             BeanUtils.copyProperties(projectInfo,projectInfoDto);
+             result.add(projectInfoDto);
+         }
+
+         return result;
     }
 }

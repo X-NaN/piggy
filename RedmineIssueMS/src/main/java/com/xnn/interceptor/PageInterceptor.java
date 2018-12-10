@@ -28,7 +28,14 @@ public class PageInterceptor implements Interceptor {
     private int currPage;
 
     private String dbType;
+    private String limit;
 
+    /**
+     * interceptor方法用于处理代理类的执行
+     * @param invocation
+     * @return
+     * @throws Throwable
+     */
     public Object intercept(Invocation invocation) throws Throwable {
         //获取StatementHandler，默认是RoutingStatementHandler
         StatementHandler statementHandler = (StatementHandler) invocation.getTarget();
@@ -90,6 +97,7 @@ public class PageInterceptor implements Interceptor {
 
     /**
      * 获取代理对象
+     * plugin方法用于某些处理器(Handler)的构建过程
      * @param o
      * @return
      */
@@ -99,6 +107,7 @@ public class PageInterceptor implements Interceptor {
 
     /**
      * 设置代理对象的参数
+     * setProperties方法用于拦截器属性的设置
      * @param properties
      */
     public void setProperties(Properties properties) {
@@ -107,5 +116,21 @@ public class PageInterceptor implements Interceptor {
         this.pageSize = Integer.valueOf(limit1);
         this.dbType = properties.getProperty("dbType", "mysql");
 
+    }
+
+    public void setLimit(String limit) {
+        this.limit = limit;
+    }
+
+    public String getLimit() {
+        return limit;
+    }
+
+    public void setDbType(String dbType) {
+        this.dbType = dbType;
+    }
+
+    public String getDbType() {
+        return dbType;
     }
 }
