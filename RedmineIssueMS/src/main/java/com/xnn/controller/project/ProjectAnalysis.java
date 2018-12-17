@@ -35,12 +35,7 @@ public class ProjectAnalysis {
         return "/project/ProjectAnalysis";
     }
 
-    @RequestMapping("/getProjectDailyReport")
-    public String init() {
 
-        return "/project/ProjectDailyReport";
-
-    }
 
     /**
      * @param projectId
@@ -58,25 +53,6 @@ public class ProjectAnalysis {
         return mav;
     }
 
-    @RequestMapping(value = "/getProjectChart", params = {"projectId"})
-    public void getProjectChart(@RequestParam("projectId") String projectId, Model model) {
 
-        Project project = redmineService.getProject(projectId);
-
-        Map<String, Object> categoryIssueCount = new HashMap<String, Object>();
-        List<IssueCategory> categoryList = null;
-        try {
-            categoryList = redmineService.getCategories(project.getId());
-        } catch (RedmineException e) {
-            e.printStackTrace();
-        }
-        List<Issue> issueList = redmineService.getALlIssuesByProjectId(project.getIdentifier());
-        for (int i = 0; i < categoryList.size(); i++) {
-            IssueCategory category = categoryList.get(i);
-
-
-        }
-
-    }
 
 }

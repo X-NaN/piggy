@@ -27,9 +27,13 @@ public class ProjectServiceImpl implements IProjectService {
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
 
-    public ProjectInfo getByProjectId(String projectId) {
+    public ProjectInfoDto getByProjectId(String projectId) {
         ProjectInfo projectInfo = projectInfoMapper.selectByProjectId(projectId);
-        return projectInfo;
+        ProjectInfoDto projectInfoDto=new ProjectInfoDto();
+        if (projectInfo!=null){
+            BeanUtils.copyProperties(projectInfo,projectInfoDto);
+        }
+        return projectInfoDto;
     }
 
     /**

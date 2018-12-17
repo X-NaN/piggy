@@ -62,7 +62,6 @@ public class RedmineService implements IRedmineService {
     }
 
 
-
     /**
      * 根据项目Id，查询该项目所有Issues
      *

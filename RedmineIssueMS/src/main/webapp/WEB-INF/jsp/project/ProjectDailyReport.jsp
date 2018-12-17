@@ -11,111 +11,100 @@
 <html>
 <head>
     <title>项目日报</title>
+    <script type="text/javascript" src="${basePath}/js/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="${basePath}/js/echarts/echarts.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            // 基于准备好的dom，初始化echarts实例
-            var myChart = echarts.init(document.getElementById('main'));
-
-            // 指定图表的配置项和数据
-            var option = {
-                title: {
-                    text: 'ECharts 入门示例'
-                },
-                tooltip: {},
-                legend: {
-                    data:['各个模块问题数量']
-                },
-                xAxis: {
-                    data: ["类别1","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-                },
-                yAxis: {},
-                series: [{
-                    name: '问题数量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }]
-            };
-
-            // 使用刚指定的配置项和数据显示图表。
-            myChart.setOption(option);
-
-            function loadChart() {
-                var projectId =$("#projectId").val();
-                $.ajax({
-                    type:'GET',
-                    url:"${basePath}/project/getProjectChart/",
-                    contentType: "application/json; charset=utf-8",
-                    async : true ,
-                    data:{account:projectId},
-                    dataType: "json",
-                    success: function (data) {
-                        myChart.showLoading({text: '正在努力的读取数据中...'});
-                        myChart.setOption({
-                            xAxis: {
-                                data: data.categories
-                            },
-                            series: [{
-                                // 根据名字对应到相应的系列
-                                name: '问题数量',
-                                data: data.data
-                            }]
-                        });
-                        myChart.hideLoading();
-                    },
-
-                    error: function (msg) {
-                        layer.msg('数据出错了!!');
-                    }
-                });
-
-            }
-
-        })
-
-
-
-
-    </script>
+    <style>
+        table,td,th
+        {
+            border:1px solid black;
+        }
+        table{
+            width:600px;
+        }
+        td
+        {
+            text-align:left;
+        }
+    </style>
 </head>
 <body>
 <div id="tb" style="padding:3px">
     <span>Product ID:</span>
-    <input id="projectId" style="line-height:26px;border:1px solid #ccc">
+    <input id="projectId" style="line-height:26px;border:1px solid #ccc" value="${project.projectId}">
     <a href="/project/getProject?projectId=${project.projectId} " plain="true" onclick="doSearch()">Search</a>
     <label>${project.projectId}</label>
 </div>
 <div>
-    <table>
-        <thead>
-        <tr class="success">
-            <th>项目Id</th>
-            <th>项目名称</th>
-            <th>项目状态</th>
-            <th>风险级别</th>
-            <th>硬件平台</th>
-
-            <th>编辑</th>
-            <th>删除</th>
+    <table >
+        <tr><td>项目名称：</td><td>${project.projectId}</td><td></td><td></td></tr>
+        <tr><td>硬件平台：</td><td>${project.hardwarePlatform}(${project.platformModel})</td>
+            <td>项目负责人：</td><td>${project.leader.userName}</td>
         </tr>
-        </thead>
-        <tr>
-            <td>${project.projectId}</td>
-            <td>${project.projectName}</td>
-            <td>${project.projectStatus}</td>
-            <td>${project.riskLevel}</td>
-            <td>${project.hardwarePlatform}</td>
-
-            <td><a href="/getProject/${project.projectId}">编辑<span class="glyphicon glyphicon-edit"></span> </a></td>
-            <td><a href="/getProject/${project.projectId}" onclick="javascript:return del();">删除<span
-                    class="glyphicon glyphicon-trash"></span> </a></td>
-        </tr>
+        <tr><td>项目状态：</td><td>${project.projectStatus}</td><td></td><td></td></tr>
+        <tr><td>阶段：</td><td></td><td></td><td></td></tr>
+        <tr><td>时间：</td><td></td><td></td><td></td></tr>
+        <tr><td>状态：</td><td></td><td></td><td></td></tr>
     </table>
 </div>
 
 <!-- 为ECharts准备一个具备大小（宽高）的Dom -->
 <div id="main" style="width: 600px;height:400px;"></div>
+<script type="text/javascript">
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('main'));
 
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '机型项目${project.projectId}'
+        },
+        tooltip: {},
+        legend: {
+            data:['bug状态分布']
+        },
+        xAxis: {
+            data: []
+        },
+        yAxis: {},
+        series: [{
+            name: 'bug状态分布',
+            type: 'bar',
+            data: []
+        }]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+    $.ajax({
+        type:'GET',
+        url:"${basePath}/dailyReport/getBugStatusDistribution?projectId=${project.projectId}",
+        contentType: "application/json; charset=utf-8",
+        async : true ,
+        data:{},
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            myChart.showLoading({text: '正在努力的读取数据中...'});
+            myChart.setOption({
+                xAxis: {
+                    data: data.status
+                },
+                series: [{
+                    // 根据名字对应到相应的系列
+                    name: 'bug状态分布',
+                    data: data.num
+                }]
+            });
+            myChart.hideLoading();
+        },
+
+        error: function (msg) {
+            layer.msg('数据出错了!!');
+        }
+    });
+
+</script>
 
 
 </body>

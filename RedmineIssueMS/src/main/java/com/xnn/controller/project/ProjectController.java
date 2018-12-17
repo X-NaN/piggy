@@ -37,6 +37,8 @@ public class ProjectController {
      */
     @RequestMapping("/addProject")
     public String add(ProjectInfoDto projectInfoDto, Model model) {
+
+        ResultData resultData=new ResultData();
         if (projectServiceImpl.insertProject(projectInfoDto)) {
             model.addAttribute(PageCodeEnum.KEY, PageCodeEnum.ADD_SUCCESS);
         } else {
